@@ -126,13 +126,18 @@
 // export default TextEditor;
 import { useState, useRef, useMemo } from "react";
 import JoditEditor from "jodit-react";
+import { Typography } from "antd";
 
 function TextEditor() {
   const editor = useRef(null);
   const [content, setContent] = useState("");
 
   return (
-    <div className="flex items-center justify-center h-screen  relative">
+    <div className="flex items-center flex-col justify-center h-screen  relative">
+      <Typography style={{ color: "white", fontSize: "5vw" }}>
+        {" "}
+        Text Editor
+      </Typography>
       <JoditEditor
         ref={editor}
         value={content}

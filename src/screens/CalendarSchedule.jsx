@@ -51,6 +51,7 @@
 import React, { useEffect, useRef } from "react";
 import { scheduler } from "dhtmlx-scheduler";
 import "dhtmlx-scheduler/codebase/dhtmlxscheduler.css";
+import { Typography } from "antd";
 
 const CalendarSchedule = ({ events }) => {
   const schedulerContainer = useRef(null);
@@ -75,18 +76,31 @@ const CalendarSchedule = ({ events }) => {
   }, [events]);
 
   return (
-    <div className="lg:h-[50vh]  h-[80vh] mb-6 bg-white lg:ml-4 lg:w-[70vw] w-[100vw]">
-      <div
-        ref={schedulerContainer}
+    <>
+      <Typography
         style={{
-          width: "70%",
-          height: "100%",
-          marginTop: "3vw",
-          marginLeft: "5vw",
-          // fontSize: "2vw",
-          overflow: "auto",
-        }}></div>
-    </div>
+          color: "white",
+          fontSize: "3vw",
+          textAlign: "center",
+          margin: "3vw 2vw",
+        }}>
+        {" "}
+        Calendar Sechdule
+      </Typography>
+      <div className="lg:h-[50vh]  h-[80vh] mb-[2vw]  lg:ml-4 lg:w-[70vw] w-[100vw]">
+        <div
+          ref={schedulerContainer}
+          style={{
+            width: "70%",
+            height: "100%",
+            marginTop: "3vw",
+            marginLeft: "5vw",
+            marginBottom: "3vw",
+            // fontSize: "2vw",
+            overflow: "auto",
+          }}></div>
+      </div>
+    </>
   );
 };
 
