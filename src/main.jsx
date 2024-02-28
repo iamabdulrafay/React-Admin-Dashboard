@@ -27,7 +27,7 @@ const router = createBrowserRouter(
     <Route path="" element={<App />}>
       <Route path="/" element={<Home />}></Route>
       <Route path="/users" element={<Users />} />
-      <Route path="/updateform" element={<UpdateForm />} />
+
       <Route path="/Product" element={<Product />} />
       <Route path="/import" element={<Import />} />
       <Route path="/product/:id" element={<ProductDetails />} />

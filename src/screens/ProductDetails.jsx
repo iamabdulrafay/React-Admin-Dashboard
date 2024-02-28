@@ -10,7 +10,7 @@ const ProductDetails = () => {
   const foundItem = matchedItem.find((e) => e.id == id);
 
   return (
-    <div className=" h-screen flex items-center justify-center">
+    <div className=" min-h-screen flex items-center justify-center">
       <div className="bg-gray-100 dark:bg-gray-800 py-8 ">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row -mx-4">
