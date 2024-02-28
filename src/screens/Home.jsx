@@ -8,7 +8,7 @@ import ChartInBox from "../components/ChartInBox";
 const Home = () => {
   return (
     <>
-      <div className="flex lg:flex-row flex-col lg:w-[85vw] h-screen py-20 text-white bg-slate-950">
+      <div className="flex lg:flex-row flex-col lg:w-[85vw] min-h-screen py-20 text-white bg-slate-950">
         <div className="left md:flex md:flex-row  md:h-[40vw] lg:h-[80vh] flex-wrap flex-2 gap-2 lg:w-[23vw] mr-4">
           <div className="border lg:mb-0 md:mb-0  mb-5 md:[100vw]">
             <h1 className="text-lg lg:text-[1.5vw] flex-wrap px-5 py-3 font-bold">
