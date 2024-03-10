@@ -5,9 +5,9 @@ const ProductDetails = () => {
   const { id } = useParams();
   //   console.log(pid);
   const { state } = useLocation();
-  const matchedItem = state.state.totalUserData;
-
-  const foundItem = matchedItem.find((e) => e.id == id);
+  // const matchedItem = state.state.product;
+  // console.log("product", state.product);
+  const foundItem = state.product;
 
   return (
     <div className=" min-h-screen flex items-center justify-center">

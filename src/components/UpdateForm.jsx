@@ -1,47 +1,52 @@
+import React, { useState } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 
-const UpdateForm = ({ id }) => {
-  const [totalUserData, setTotalUserData] = useState([]);
-
-  const totalUserApiData = async () => {
-    try {
-      const { data } = await axios(
-        `http://localhost:3000/UserInformations/${id}`
-      );
-      setTotalUserData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    totalUserApiData();
-  }, []);
-
-  console.log("totalUserDateUoadetform", totalUserData);
-
+const UpdateForm = ({ data, state }) => {
   const [fieldsChange, setFieldsChange] = useState({
-    name: "",
-    Position: "",
-    Office: "",
-    Age: "",
-    Start_date: "",
-    Salary: "",
+    name: data.name,
+    Position: data.position,
+    Office: data.office,
+    Age: data.age,
+    Start_date: data.startDate,
+    Salary: data.salary,
   });
 
   const onUserFieldsChange = (e) => {
     setFieldsChange({
       ...fieldsChange,
-      ...totalUserData,
       [e.target.name]: e.target.value,
     });
   };
-  // console.log(fieldsChange);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (data.id) {
+        // Update existing user
+        const response = await axios.put(`/api/users/${data.id}`, fieldsChange);
+        if (response.data.success) {
+          // Update state with updated data
+          state((prevData) =>
+            prevData.map((user) =>
+              user.id === data.id ? { ...user, ...fieldsChange } : user
+            )
+          );
+        }
+      } else {
+        // Add new user
+        const response = await axios.post("/api/users", fieldsChange);
+        if (response.data.success) {
+          // Add new user to state
+          state((prevData) => [...prevData, response.data.user]);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
-    <form class="max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto">
       <div class="relative z-0 w-full mb-5 group">
         <input
           type="text"
@@ -150,7 +155,7 @@ const UpdateForm = ({ id }) => {
       </div>
       <button
         type="submit"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Submit
       </button>
     </form>
@@ -158,3 +163,11 @@ const UpdateForm = ({ id }) => {
 };
 
 export default UpdateForm;
+
+<form class="max-w-md mx-auto">
+  <button
+    type="submit"
+    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    Submit
+  </button>
+</form>;

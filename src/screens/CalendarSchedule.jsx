@@ -87,7 +87,7 @@ const CalendarSchedule = ({ events }) => {
         {" "}
         Calendar Sechdule
       </Typography>
-      <div className="lg:h-[50vh]  h-[80vh] mb-[2vw]  lg:ml-4 lg:w-[70vw] w-[100vw]">
+      <div className=" lg:container lg:mx-auto lg:flex  lg:items-center lg:justify-center  lg:h-[50vh]  h-[80vh] mb-[2vw]  lg:ml-4 lg:w-[70vw] w-[100vw]">
         <div
           ref={schedulerContainer}
           style={{

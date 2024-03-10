@@ -20,30 +20,28 @@ const Piecharts = () => {
   console.log("LeadsbySource", leadsData);
   return (
     <>
-      <div className="chart">
-        <ResponsiveContainer width="99%" height={300}>
-          <PieChart>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "white",
+      <ResponsiveContainer width="99%" height={300}>
+        <PieChart>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "white",
 
-                borderRadius: "5px",
-              }}
-            />
-            <Pie
-              data={leadsData}
-              innerRadius={"70%"}
-              outerRadius={"90%"}
-              paddingAngle={5}
-              dataKey="value">
-              {" "}
-              {leadsData.map((item) => (
-                <Cell key={item.name} fill={item.color} />
-              ))}
-            </Pie>
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
+              borderRadius: "5px",
+            }}
+          />
+          <Pie
+            data={leadsData}
+            innerRadius={"70%"}
+            outerRadius={"90%"}
+            paddingAngle={5}
+            dataKey="value">
+            {" "}
+            {leadsData.map((item) => (
+              <Cell key={item.name} fill={item.color} />
+            ))}
+          </Pie>
+        </PieChart>
+      </ResponsiveContainer>
     </>
   );
 };

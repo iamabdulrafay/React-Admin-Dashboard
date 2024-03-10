@@ -9,6 +9,7 @@ import {
   Select,
 } from "antd";
 import axios from "axios";
+import { nanoid } from "@reduxjs/toolkit";
 
 const { TextArea } = Input;
 
@@ -40,25 +41,31 @@ const Import = () => {
       formData.sallary
     ) {
       try {
-        const { data } = await axios.post(
-          "http://localhost:3000/UserInformations",
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json", // Set Content-Type header
-            },
-          }
-        );
-        console.log("data", data);
-        setDangerAlert(false);
+        const id = nanoid();
+        const withId = {
+          id,
+          ...formData,
+        };
+
+        // Retrieve existing data from local storage or initialize to an empty array
+        const allData = JSON.parse(localStorage.getItem("users") || "[]");
+
+        // Append the new data to the existing data
+        const newData = [...allData, withId];
+
+        // Update the data in local storage
+        localStorage.setItem("users", JSON.stringify(newData));
+
         setSuccessAlert(true);
+        setDangerAlert(false);
+
         // Clear the form fields after successful submission
         setFormData({
           name: "",
           office: "",
           position: "",
           startDate: null,
-          age: "",
+          age: null,
           sallary: null,
         });
       } catch (error) {

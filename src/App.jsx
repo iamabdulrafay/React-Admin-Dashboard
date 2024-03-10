@@ -9,14 +9,14 @@ import { apiFetching } from "./features/AsyncApiSelice";
 const App = () => {
   return (
     <>
-      <div className="w-full  flex   bg-slate-950 overflow-x-hidden overflow-y-hidden justify-between">
-        <div className="left w-[10vw] ">
+      <div className="w-full flex min-h-screen bg-gradient-to-br from-black to-slate-950 overflow-x-hidden overflow-y-hidden justify-around">
+        <div className="left w-auto ">
           <Navbar></Navbar>
         </div>
         <div className="right w-[80vw] ">
           <Outlet></Outlet>
         </div>
-        <div className=""></div>
+        {/* <div className=""></div> */}
       </div>
       <Footer></Footer>
     </>

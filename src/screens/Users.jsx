@@ -138,8 +138,7 @@ const Users = () => {
 
   return (
     <>
-      <div className="w-[20vw] absolute">{/* <Navbar></Navbar> */}</div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container  mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <DataShownTable
           title="Name"
           company="Office"
@@ -147,6 +146,7 @@ const Users = () => {
           amount="Sallary"
           position="Position"
           age="Age"
+          // url="https://api.jsonbin.io/v3/b/65deee32266cfc3fde907313"
           url="https://api.jsonbin.io/v3/b/65deee32266cfc3fde907313"></DataShownTable>
       </div>
     </>

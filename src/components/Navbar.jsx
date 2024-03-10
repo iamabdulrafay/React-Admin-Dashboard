@@ -21,19 +21,17 @@ const Navbar = () => {
       <BarsOutlined
         onClick={toggleSidebar}
         className="none lg:text-slate-950 md:text-slate-950  text-white"
-        style={{}}
       />{" "}
-      *
       <div
         className={`${
           isSidebarOpen ? "hidden" : ""
         } md:flex md:w-64 md:flex-col  z-30`}>
         <div
-          className={`flex flex-col flex-grow pt-5 ${
+          className={`flex flex-col flex-grow pt-5 h-[90vh]${
             isSidebarOpen ? " w-[15vw]" : "w-[70vw]"
-          }  overflow-y-auto bg-[#007bff] ${
+          } overflow-y-auto bg-blue-800 ${
             isSidebarOpen ? " z-1" : "absolute"
-          }  z-30`}>
+          } z-30`}>
           <div className="flex items-center flex-shrink-0 px-4 ">
             {/* <img
               className="w-auto h-8"
@@ -45,7 +43,7 @@ const Navbar = () => {
             </h1>
           </div>
 
-          <div className="px-4 mt-8">
+          {/* <div className="px-4 mt-8">
             <label for="" className="sr-only">
               {" "}
               Search{" "}
@@ -74,19 +72,19 @@ const Navbar = () => {
                 placeholder="Search here"
               />
             </div>
-          </div>
+          </div> */}
 
           <div className="px-4 mt-6">
             <hr className="border-gray-200" />
           </div>
 
-          <div className="flex flex-col flex-1 px-3 mt-6">
-            <div className="space-y-4">
+          <div className="flex flex-col flex-1 px-3 mt-8">
+            <div className="space-y-12">
               <nav className="flex-1 space-y-2">
                 <Link
                   href="/"
                   title=""
-                  className="flex items-center px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 bg-slate-950 rounded-lg group">
+                  className="flex items-center px-4 py-4 text-sm font-medium text-white transition-all duration-200 bg-slate-950 rounded-lg group">
                   <svg
                     className="flex-shrink-0 w-5 h-5 mr-4 text-white"
                     xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +104,7 @@ const Navbar = () => {
 
                 <Link
                   to="/users"
-                  className="flex  items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
+                  className="flex  items-center px-4 py-4 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
                   <svg
                     className="flex-shrink-0 w-5 h-5 mr-4"
                     xmlns="http://www.w3.org/2000/svg"
@@ -126,28 +124,28 @@ const Navbar = () => {
 
                 <Link
                   to="/Product"
-                  className="flex  items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
+                  className="flex  items-center px-4 py-4 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
                   <ProductOutlined className="flex-shrink-0 w-5 h-5 mr-4" />
                   Product
                 </Link>
 
                 <Link
                   to="/schedule"
-                  className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
+                  className="flex items-center px-4 py-4 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
                   <CalendarOutlined className="flex-shrink-0 w-5 h-5 mr-4" />
                   Calendar
                 </Link>
 
                 <Link
                   to="/editor"
-                  className="flex items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
+                  className="flex items-center px-4 py-4 text-sm font-medium transition-all duration-200 text-white hover:text-white rounded-lg hover:bg-slate-950 group">
                   <FileTextOutlined className="flex-shrink-0 w-5 h-5 mr-4" />
                   Text Editor
                 </Link>
 
                 <Link
                   to="/login"
-                  className="flex  items-center px-4 py-2.5 text-sm font-medium transition-all duration-200 text-white  hover:text-white rounded-lg hover:bg-slate-950 group">
+                  className="flex  items-center px-4 py-4 text-sm font-medium transition-all duration-200 text-white  hover:text-white rounded-lg hover:bg-slate-950 group">
                   <LoginOutlined className="flex-shrink-0 w-5 h-5 mr-4" />
                   Login
                 </Link>

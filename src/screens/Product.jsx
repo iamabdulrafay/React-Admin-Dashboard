@@ -3,7 +3,7 @@ import DataShownTable from "../components/DataShownTable";
 
 const Product = () => {
   return (
-    <div>
+    <div className="container  mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <DataShownTable
         title="Title"
         company="Company"

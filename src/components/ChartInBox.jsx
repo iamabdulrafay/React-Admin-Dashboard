@@ -13,6 +13,7 @@ const ChartInBox = () => {
         "https://api.jsonbin.io/v3/b/65dee5ec266cfc3fde90702f"
       );
       setTotalUserData(data.record.ChartBoxTotalUsers);
+      // setTotalUserData(data);
       // console.log("Cahartinbox", data.record.ChartBoxTotalUsers);
     } catch (error) {
       console.log(error);
@@ -39,15 +40,15 @@ const ChartInBox = () => {
 
   return (
     <div className="flex lg:w-[17vw]  lg:h-[17vh] items-center justify-center py-4 px-5">
-      <div className="w-[12vw] h-[10vh]">
-        <h1 className="text-xl lg:text-lg font-medium">
+      <div className="w-auto h-[10vh]">
+        <h1 className="text-2xl lg:text-lg font-medium">
           {totalUserData.title}
         </h1>
-        <h1 className="text-xl lg:text-lg font-medium">
+        <h1 className="text-2xl lg:text-lg font-medium">
           {totalUserData.number}
         </h1>
       </div>
-      <div className="w-[10vw] h-[10vh]">
+      <div className="w-40 lg:w-auto h-[10vh]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={totalUserData.chartData}>
             <Tooltip />
@@ -63,7 +64,7 @@ const ChartInBox = () => {
 
         <div className="texts">
           <span
-            className="percentage"
+            className="percentage "
             style={{
               color: totalUserData.percentage < 0 ? "tomato" : "limegreen",
             }}>

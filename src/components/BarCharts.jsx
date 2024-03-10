@@ -7,42 +7,39 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { apiFetching } from "../features/AsyncApiSelice";
 
 const BarCharts = ({ url, color }) => {
   const [apiChartData, setApiChartData] = useState([]);
 
-  // rtk
-
   const dispatch = useDispatch();
-  const { user, loading, error } = useSelector((state) => state.apiData); // Assuming your slice is named "user"
+  const { user } = useSelector((state) => state.apiData);
 
   useEffect(() => {
     dispatch(apiFetching(url));
-  }, [dispatch]);
+  }, [dispatch, url]);
 
   useEffect(() => {
-    if (user && user.record && user.record.barChartBoxRevenue) {
+    if (
+      user &&
+      user.record &&
+      user.record.barChartBoxRevenue &&
+      user.record.barChartBoxRevenue.chartData
+    ) {
       setApiChartData(user.record.barChartBoxRevenue.chartData);
-    }
-    if (user && user.record && user.record.barChartBoxVisit) {
-      setApiChartData(user.record.barChartBoxRevenue.barChartBoxVisit);
     }
   }, [user]);
 
   return (
-    <div className="barChartBox">
-      <ResponsiveContainer width="100%" height={150}>
-        <BarChart data={apiChartData}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="profit" fill={color} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={150}>
+      <BarChart data={apiChartData}>
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Bar dataKey="profit" fill={color} />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

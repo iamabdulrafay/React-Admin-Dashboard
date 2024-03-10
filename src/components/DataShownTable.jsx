@@ -1,11 +1,11 @@
+import { Table, Button, Space } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AppstoreAddOutlined, DeleteOutlined } from "@ant-design/icons";
-import { Alert, Modal, Skeleton, Spin } from "antd";
-import UpdateForm from "./UpdateForm";
-import { useDispatch, useSelector } from "react-redux";
-import { apiFetching } from "../features/AsyncApiSelice";
+import { current } from "@reduxjs/toolkit";
+// import UpdateForm from "./UpdateForm";
+
 const DataShownTable = ({
   url,
   title,
@@ -19,40 +19,35 @@ const DataShownTable = ({
 }) => {
   const [totalUserData, setTotalUserData] = useState([]);
   const [modal, setModal] = useState(false);
+  const [clickData, setClickData] = useState({});
   const [ApiHeading, setApiHeading] = useState({});
-  const [clickId, setClickId] = useState({});
-  const [fieldsChange, setFieldsChange] = useState({
-    Name: "",
-    Position: "",
-    Office: "",
-    Age: "",
-    Start_date: "",
-    Salary: "",
-  });
-
-  const onUserFieldsChange = (e) => {
-    setFieldsChange({
-      ...fieldsChange,
-      [e.target.name]: e.target.value,
-    });
-  };
-  console.log(fieldsChange);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
   const totalUserApiData = async () => {
     try {
-      const { data } = await axios({
-        url: url,
-        method: "GET",
-      });
-      //   setTotalUserData(data);
-      if (data.record.UserInformations) {
-        setTotalUserData(data.record.UserInformations);
-      } else if (data.record.ProductPage) {
-        setTotalUserData(data.record.ProductPage);
+      const { data } = await axios.get(url);
+      if (data.record && data.record.ProductPage) {
+        setTotalUserData(
+          data.record.ProductPage.map((item, index) => ({
+            ...item,
+            key: `product_${index}`, // Use "product" instead of "user" for ProductPage
+          }))
+        );
+      } else if (data.record && data.record.UserInformations) {
+        setTotalUserData(
+          data.record.UserInformations.map((item, index) => ({
+            ...item,
+            key: `user_${index}`,
+          }))
+        );
+        const localData = JSON.parse(localStorage.getItem("users") || "[]");
+        const newData = localData.filter((item) =>
+          totalUserData.every((user) => user.id !== item.id)
+        );
+        setTotalUserData((prevData) => [...prevData, ...newData]);
       } else {
         // Handle other cases or set default data
-        setTotalUserData(defaultData);
       }
-      console.log(data, "datashwom");
       setApiHeading(data);
     } catch (error) {
       console.log(error);
@@ -63,115 +58,128 @@ const DataShownTable = ({
     totalUserApiData();
   }, []);
 
-  // console.log("total", totalUserData.products);
-
   const totalUserApiDataDelete = async (id) => {
     try {
-      const { data } = await axios({
-        method: "DELETE",
-        url: `${url}/${id}`,
-      });
-
-      setTotalUserData((prevData) =>
-        prevData.filter((booking) => booking.id !== id)
-      );
+      const localData = JSON.parse(localStorage.getItem("users") || "[]");
+      const updatedData = localData.filter((item) => item.id !== id);
+      localStorage.setItem("users", JSON.stringify(updatedData));
+      setTotalUserData((prevData) => prevData.filter((item) => item.id !== id));
     } catch (error) {
-      console.log(error);
+      console.error("Error deleting item:", error);
     }
   };
 
-  console.log("totalDelee", totalUserData.id);
+  const handleModal = (content) => {
+    setClickData(content);
+    setModal(true);
+  };
 
-  // new logic of update
+  const columns = [
+    {
+      title: title,
+      dataIndex: totalUserData[0]?.title ? "title" : "name",
+      key: totalUserData[0]?.position ? "title" : "name",
+    },
+    {
+      title: "Company",
+      dataIndex: totalUserData[0]?.producer ? "producer" : "office",
+      key: totalUserData[0]?.producer ? "producer" : "office",
+    },
 
-  // not working bcuase of json publsisihng
-  // const handleModal = (id) => {
-  //   setClickId(id);
-  //   setModal(true);
-  //   try {
-  //   } catch (error) {}
-  // };
+    {
+      title: totalUserData[0]?.position ? "Position" : "Color",
+      dataIndex: totalUserData[0]?.position ? "position" : "color",
+      key: totalUserData[0]?.position ? "position" : "color",
+    },
+
+    {
+      title: instock || age,
+      dataIndex: totalUserData[0]?.inStock ? "inStock" : "age",
+      key: totalUserData[0]?.inStock ? "inStock" : "age",
+    },
+    {
+      title: date,
+      dataIndex: totalUserData[0]?.createdAt ? "createdAt" : "startDate",
+      key: totalUserData[0]?.createdAt ? "createdAt" : "startDate",
+    },
+    {
+      title: amount,
+      dataIndex: totalUserData[0]?.price ? "price" : "salary",
+      key: totalUserData[0]?.price ? "price" : "salary",
+      sorter: (a, b) => {
+        // Extract the amount values from the data objects
+        const amountA = a.price || a.salary;
+        const amountB = b.price || b.salary;
+
+        // Compare the amounts for sorting
+        if (amountA < amountB) {
+          return -1; // Indicates "a" comes before "b"
+        }
+        if (amountA > amountB) {
+          return 1; // Indicates "b" comes before "a"
+        }
+        return 0; // Indicates both are equal
+      },
+    },
+  ];
+
+  // Add "Details" column only if at least one item has the "price" property
+  if (totalUserData.some((product) => product.price !== undefined)) {
+    columns.push({
+      title: "Details",
+      key: "details",
+      render: (text, record) => (
+        <Link to={`/product/${record.id}`} state={{ product: record }}>
+          Details
+        </Link>
+      ),
+    });
+  }
+  if (totalUserData.some((user) => user.age !== undefined)) {
+    columns.push({
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <Space size="middle">
+          {/* <Button
+            type="primary"
+            icon={<AppstoreAddOutlined />}
+            onClick={() => handleModal(record)}>
+            Add
+          </Button> */}
+          <Button
+            type="danger"
+            icon={<DeleteOutlined />}
+            onClick={() => totalUserApiDataDelete(record.id)}>
+            Delete
+          </Button>
+        </Space>
+      ),
+    });
+  }
 
   return (
     <>
-      {" "}
-      <div className=" lg:block lg:xl  flex  lg:h-auto items-center justify-center h-[100vh]   ">
-        <div className="bg-white mx-auto  w-[75vw] lg:w-auto  lg:px-4    ">
-          {totalUserData.some((product) => product.age) && (
-            <Link
-              state={{
-                state: { totalUserData: totalUserData, ApiHeading: ApiHeading },
-              }}
-              to="/import"
-              className="text-blue-800 flex ">
-              ADD↑
-            </Link>
-          )}
-          <table id="example" className="table-auto mt-5   w-full">
-            <thead>
-              <tr className=" lg:text-[1.3vw] text-[1vw]">
-                <th className="lg:px-4 px-1 py-2">{title}</th>
-                <th className="lg:px-4 px-1 py-2">{company}</th>
-                <th className="lg:px-4 px-1 py-2">{color || position}</th>
-                <th className="lg:px-4 px-1 py-2">{instock || age}</th>
-                <th className="lg:px-4 px-1 py-2">{date}</th>
-                <th className="lg:px-4 px-1 py-2">{amount}</th>
-                <th className="lg:px-4 px-1 py-2">Actions</th>
-                {totalUserData.some((product) => product.price) && (
-                  <th className="lg:px-4 px-1 py-2">details</th>
-                )}{" "}
-              </tr>
-            </thead>
-            <tbody className=" lg:text-[1.3vw] text-[1.5vw]">
-              {totalUserData.map((e) => (
-                <tr key={e.id}>
-                  <td className=" lg:px-4 px-1 py-2 ">
-                    <h1>{e.name || e.title}</h1>
-                  </td>
-                  <td className=" lg:px-4 px-1 py-2">
-                    {e.position || e.producer}
-                  </td>
-                  <td className=" lg:px-4 px-1 py-2">{e.office || e.color}</td>
-                  <td className=" lg:px-4 px-1 py-2">{e.age || e.inStock}</td>
-                  <td className=" lg:px-4 px-1 py-2">
-                    {e.startDate || e.createdAt}
-                  </td>
-                  <td className=" lg:px-4 px-1 py-2">{e.salary || e.price}</td>
-
-                  <td className="text-white lg:px-4 px-1 py-2 flex gap-2">
-                    <AppstoreAddOutlined
-                      onClick={() => handleModal(e.id)}
-                      className="text-slate-950 lg:text-2xl  text-[1.2]"
-                    />
-
-                    <DeleteOutlined
-                      className="text-red-600 lg:text-2xl  text-[1.2] "
-                      onClick={() => totalUserApiDataDelete(e.id)}
-                    />
-                  </td>
-                  <td>
-                    {" "}
-                    {totalUserData.some((product) => product.price) && (
-                      <Link
-                        state={{
-                          state: {
-                            totalUserData: totalUserData,
-                            ApiHeading: ApiHeading,
-                          },
-                        }}
-                        to={`/product/${e.id}`}
-                        className="text-blue-800 flex ">
-                        details
-                      </Link>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className=" lg:block flex-wrap flex lg:h-auto items-center justify-center min-h-[100vh] ">
+        <div className="container overflow-x-auto mx-auto w-[90vw] lg:w-auto lg:px-4 ">
+          <Table
+            columns={columns}
+            dataSource={totalUserData}
+            pagination={{
+              current: page,
+              pageSize: pageSize,
+              onChange: (page, pageSize) => {
+                setPageSize(pageSize);
+                setPage(page);
+              },
+            }}
+            // responsive={true}
+          />
         </div>
 
-        {modal && <UpdateForm id={clickId}></UpdateForm>}
+        {/* {modal && (
+          <UpdateForm data={clickData} state={setTotalUserData}></UpdateForm>
+        )} */}
       </div>
     </>
   );
